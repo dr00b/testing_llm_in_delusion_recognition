@@ -49,13 +49,64 @@ class YoutubeExtractor:
         #     parentId="UgzDE2tasfmrYLyNkGt4AaABAg"
         # )
 
-    def find_experts(self, topic_list, languages=['en']):
+    def get_closed_captions(self):
+        '''no longer accessible via data api without authentication by the channel owner'''
+        # https://issuetracker.google.com/issues/241669016?pli=1
         pass
+
+    def find_experts(self, topic_list, language='en'):
+        def iterate_responses(response):
+            for item in response['items']:
+                channelID = item['id']['channelId']
+                title = item['snippet']['channelTitle']
+                description = item['snippet']['description']
+                if 'I' in description.split(' '):
+                    print(channelID)
+                    print(title)
+                    print(description)
+        
+        q = '|'.join(topic_list)
+
+        request = self.youtube_client.search().list(
+            part="snippet",
+            q=q,
+            type='channel',
+            # order="viewCount",
+            maxResults=50,
+            relevanceLanguage=language
+        )
+        response = request.execute()
+        next_page_token = response.get('nextPageToken', None)
+        iterate_responses(response)
+
+        count=0
+        while next_page_token:
+            count+=1
+            if count > 15:
+                break
+            request = self.youtube_client.search().list(
+                part="snippet",
+                q=q,
+                type='channel',
+                # order="viewCount",
+                maxResults=50,
+                relevanceLanguage=language,
+                pageToken=next_page_token
+            )
+            response = request.execute()
+            next_page_token = response.get('nextPageToken', None)
+            iterate_responses(response)
+
+        
+
+
+
+        #print(response)
         
                 
 def main():
     expert_finder = YoutubeExtractor([])
-    expert_finder.get_comment_threads()
+    expert_finder.find_experts(['dementia|alzheimer'])
 
 if __name__ == "__main__":
     main()
