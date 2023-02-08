@@ -1,6 +1,8 @@
 # nlp_final
 Test - Beep boop
 
+# Issues
+- Search function does not actually order by views despite parameter. Receiving very low view count videos alongside "stars".
 
 # TODO
 - create requirements.txt
