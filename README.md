@@ -4,6 +4,8 @@ Test - Beep boop
 # Issues
 - Search function does not actually order by views despite parameter. Receiving very low view count videos alongside "stars".
 - Discrepancy in API comments count per vid and browser count.
+
+
 | VideoID | Browser Count | API Count | API Coll Date |
 | ------- | ---------| -------- | ------- |
 | zx7gLoPMO-s | 105 | 64 | 2023-02-08 |
