@@ -20,6 +20,7 @@ Test - Beep boop
 - Not clear why data is not present in API which is present via browser. May be result of anti-spam filters. In other cases, channel owners moderate comment content, stays in under review, but the comment count has already incremented in database. Complexity of managing a system with billions of videos, can't eventual consistency of aggregate stats. A [quora post to explain.](https://www.quora.com/Why-do-the-comments-number-on-Youtube-sometimes-not-match-the-actual-ones-shown)
 
 # TODO
+- https://www.youtube.com/watch?v=W6oQfSraqwg, load some spanish comments
 - create requirements.txt
 - deidentify the comments, and the channel?
 - read 
