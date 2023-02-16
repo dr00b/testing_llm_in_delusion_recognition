@@ -1,0 +1,24 @@
+The following text was extracted from a Youtube comment in which the commenter describes an individual with dementia. Indicate if the text contains evidence that the individual with dementia may be experiencing delusions. If it does, justify your response with excerpts from the text. Finally, identify a single, dominant theme from the possible delusion, i.e. "theft", "infidelity", "house is not home", "fear of abandonment", "dead person is alive", "people in house". Feel free to create your own theme. If there is no evidence of a delusion, do not provide experts or a theme.
+
+Text: {text}
+
+Desired JSON format:
+{
+    "possible_delusion": boolean,
+    "excerpts": [list of string excerpts],
+    "theme": string
+}
+
+Positive example:
+{
+    "possible_delusion": true,
+    "excerpts": ["delira diciendo que no vive aquí"],
+    "theme": "house is not home"
+}
+
+Negative example:
+{
+    "possible_delusion": false,
+    "excerpts": [],
+    "theme": null
+}
