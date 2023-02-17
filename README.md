@@ -45,15 +45,19 @@ Started with stop word. No response.
 
 Results: Better, returns N/A on excerpt and theme without being prompted.
 
+### Prompt Constraints
+Short prompts appear to result in incorrectly structured responses.
+
 # TODO
-- Tighten definition, or clarify that delusion must include "possible evidence to contrary". If the person is convinced of contrary, they no longer have a delusion.
+### Methods
+- Tighten definition, or clarify that delusion must include "possible evidence to contrary". If the person is convinced of the contrary, they no longer have a delusion. Should discuss this w/ peers
+- Deidentification. 1. Delete comments w/ names in them. Pronouns only. 2. Encrypt id's of commenters. Channels no... Reasonable expectation that 
+- Discuss how to identify stories w/ Patryk
+
+### Technical
 - create requirements.txt
 - Estimate cost before hands, what is the average tokens?
-- deidentify the comments, and the channel?
 - spiff it up, fork it, post on linkedin...
-https://www.biorxiv.org/content/10.1101/2022.12.23.521610v1
-https://www.nature.com/articles/d41586-023-00056-7
-
 
 # Resources
 ### Open AI on Classification
@@ -61,3 +65,10 @@ https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset
 https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
 https://medium.com/@AlyssaSha/fine-tuning-gpt-3-using-python-for-keywords-classification-6c4970526c68
 https://platform.openai.com/docs/api-reference/parameter-details
+
+### Inspiration
+https://www.biorxiv.org/content/10.1101/2022.12.23.521610v1
+https://www.nature.com/articles/d41586-023-00056-7
+
+### Technical
+https://towardsdatascience.com/demystifying-de-identification-f89c977a1be5
