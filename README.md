@@ -52,6 +52,7 @@ Short prompts appear to result in incorrectly structured responses.
 ### Methods
 - Tighten definition, or clarify that delusion must include "possible evidence to contrary". If the person is convinced of the contrary, they no longer have a delusion. Should discuss this w/ peers
 - Deidentification. 1. Delete comments w/ names in them. Pronouns only. 2. Encrypt id's of commenters. Channels no... Reasonable expectation that 
+- Verify excerpts are in original
 - Discuss how to identify stories w/ Patryk
 
 ### Technical
