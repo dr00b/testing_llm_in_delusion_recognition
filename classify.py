@@ -14,7 +14,8 @@ class Classifier:
     def __init__(self):
         self.api_key = os.getenv('OPENAI_API_KEY')
         self.sqlite_db_path = os.path.join("data", os.getenv('SQLITE_DB_NAME'))
-        self.base_prompt = open('davinci_base_prompt.txt', 'r').read()
+        self.prompt_version = os.getenv('PROMPT_VERSION')
+        self.base_prompt = open(os.path.join("prompts", f'davinci_base_prompt_v{self.prompt_version}.txt'), 'r').read()
 
     def classify(self, text):
         """
@@ -28,13 +29,14 @@ class Classifier:
         response = openai.Completion.create(
             model="text-davinci-003",
             prompt=prompt,
-            n=1,
+            top_p=1,
             temperature=0,
-            top_p=1.0,
-            max_tokens=400,
-            frequency_penalty=-0.5,
-            presence_penalty=-0.5,
+            max_tokens=500,
+            frequency_penalty=0,
+            presence_penalty=0,
         )
+        if len(response.choices[0].text) == 0:
+            return "No Text Response from OpenAI"
         return response.choices[0].text
 
 

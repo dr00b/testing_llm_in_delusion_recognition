@@ -17,6 +17,7 @@ Test - Beep boop
 
 ### Open AI
 - [500 Response Error 2/16/2023](https://community.openai.com/t/continuous-gpt3-api-500-error-the-server-had-an-error-while-processing-your-request-sorry-about-that/42239/14)
+- [No text in response](https://community.openai.com/t/empty-text-in-the-response-from-the-api-after-few-calls/2067/11). I suspect this is due to predicting a stop sequence in the first character. In playground received: "The model predicted a completion that begins with a stop sequence, resulting in no output. Consider adjusting your prompt or stop sequences."
 
 
 # Bias in Data
@@ -31,8 +32,21 @@ Test - Beep boop
 - Manually code responses, highlighting evidence (can I get annotators for this?)
 - Compute concordance, ability to cite evidence from text
 
+# Prompt Iteration
+I refuse to call this "engineering" :)
+
+This should be a table...
+1. Asked for possible delusion classification, list of excerpts as evidence, dominant theme in delusion. Specified to return false and null if there is no evidence of possible delusion.
+
+Results:
+Started with stop word. No response.
+
+2. Reduced complexity. Removed specificity of null case. Identify single excerpt and theme only. Changed to plaintext report instead of JSON.
+
+Results: Better, returns N/A on excerpt and theme without being prompted.
+
 # TODO
-- load some spanish comments
+- Tighten definition, or clarify that delusion must include "possible evidence to contrary". If the person is convinced of contrary, they no longer have a delusion.
 - create requirements.txt
 - Estimate cost before hands, what is the average tokens?
 - deidentify the comments, and the channel?

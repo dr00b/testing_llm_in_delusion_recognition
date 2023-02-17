@@ -1,0 +1,10 @@
+The following text was extracted from a Youtube comment in which the commenter describes an individual with dementia. Indicate if the text contains evidence that the individual with dementia may be experiencing delusions. If there is evidence of delusion: 
+1. justify your response with a single excerpt from the text 
+2. identify the dominant theme in the delusion, restricting response to the following list: "theft", "infidelity", "house is not home", "fear of abandonment", "dead person is alive", "phantom boarder", "other".
+
+Structure your response as follows:
+Possible Delusion: true / false
+Excerpt: Excerpt
+Dominant Theme: Theme
+
+Text: {text}
