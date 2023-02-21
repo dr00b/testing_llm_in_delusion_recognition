@@ -1,0 +1,7 @@
+Does the following text show evidence of a dementia patient which may have delusions? If yes, extract an excerpt from the text to justify your response.
+
+Structure your response as follows:
+Possible Delusion: true / false
+Excerpt: Excerpt
+
+Text: {text}

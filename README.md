@@ -45,6 +45,8 @@ Started with stop word. No response.
 
 Results: Better, returns N/A on excerpt and theme without being prompted.
 
+3. Reduced complexity, removing extraction of dominant theme. With test set of ~5, this improved performance considerably.
+
 ### Prompt Constraints
 Short prompts appear to result in incorrectly structured responses.
 
@@ -54,6 +56,7 @@ Short prompts appear to result in incorrectly structured responses.
 - Deidentification. 1. Delete comments w/ names in them. Pronouns only. 2. Encrypt id's of commenters. Channels no... Reasonable expectation that 
 - Verify excerpts are in original
 - Discuss how to identify stories w/ Patryk
+- Prompt 4 - For positive cases, feed the same text and excerpt. Ask for classification, knowing it's dementia
 
 ### Technical
 - create requirements.txt

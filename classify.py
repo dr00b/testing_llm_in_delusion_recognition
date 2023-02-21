@@ -14,7 +14,7 @@ class Classifier:
     def __init__(self):
         self.api_key = os.getenv('OPENAI_API_KEY')
         self.database_path = os.path.join("data", os.getenv('SQLITE_DB_NAME'))       
-        self.prompt_version = os.getenv('PROMPT_VERSION')
+        self.prompt_version = int(os.getenv('PROMPT_VERSION'))
         self.base_prompt = open(os.path.join("prompts", f'davinci_base_prompt_v{self.prompt_version}.txt'), 'r').read()
         self.create_classification_table()
         self.parsing_error_count = 0
@@ -53,9 +53,13 @@ class Classifier:
         dominant_theme = None
         parsing_error = False
         try: 
-            possible_delusion = True if response_text.split("Possible Delusion: ")[1].split("\n")[0] == "true" else False
-            excerpt = response_text.split("Excerpt: ")[1].split("\n")[0]
-            dominant_theme = response_text.split("Dominant Theme: ")[1].split("\n")[0]
+            if self.prompt_version == 2:
+                possible_delusion = True if response_text.split("Possible Delusion: ")[1].split("\n")[0] == "true" else False
+                excerpt = response_text.split("Excerpt: ")[1].split("\n")[0]
+                dominant_theme = response_text.split("Dominant Theme: ")[1].split("\n")[0]
+            elif self.prompt_version == 3:
+                possible_delusion = True if response_text.split("Possible Delusion: ")[1].split("\n")[0] == "true" else False
+                excerpt = response_text.split("Excerpt: ")[1].split("\n")[0]
         except IndexError:
             print(response_text)
             parsing_error = True
@@ -67,7 +71,7 @@ class Classifier:
         prompt_tokens = response.usage.prompt_tokens
         completion_tokens = response.usage.completion_tokens
         total_tokens = response.usage.total_tokens
-        return (input_text_id, response_text, possible_delusion, excerpt, dominant_theme, parsing_error, response_created, id, model, method, prompt_tokens, completion_tokens, total_tokens)
+        return (input_text_id, response_text, possible_delusion, excerpt, dominant_theme, parsing_error, response_created, id, model, method, prompt_tokens, completion_tokens, total_tokens, self.prompt_version)
 
     def create_classification_table(self):
         conn = sqlite3.connect(self.database_path)
@@ -86,6 +90,7 @@ class Classifier:
             prompt_tokens INT,
             completion_tokens INT,
             total_tokens INT,
+            prompt_version INT,
             load_ts DEFAULT CURRENT_TIMESTAMP
         )''')
         conn.commit()
@@ -101,6 +106,7 @@ class Classifier:
             WHERE to_classify = 1
             AND NOT EXISTS (
                 SELECT 1 FROM classifications WHERE input_text_id = comments.rowid
+                AND prompt_version = {self.prompt_version}
             )
             LIMIT {batch_size}
             """)
@@ -113,8 +119,8 @@ class Classifier:
                 response, text_id = self.classify_text(text, text_id)
                 response_data = self.extract_openapi_response(response, input_text_id=text_id)
                 c.execute("""INSERT INTO classifications 
-                (input_text_id, full_response_text, is_possible_delusion, excerpt, dominant_theme, parsing_error, created_ts, response_id, model, object, prompt_tokens, completion_tokens, total_tokens)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""", response_data)
+                (input_text_id, full_response_text, is_possible_delusion, excerpt, dominant_theme, parsing_error, created_ts, response_id, model, object, prompt_tokens, completion_tokens, total_tokens, prompt_version)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", response_data)
                 conn.commit()
                 if self.parsing_error_count > 5:
                     raise("Parsing Error Count > 5")
