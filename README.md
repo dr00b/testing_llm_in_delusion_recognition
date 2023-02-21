@@ -73,3 +73,6 @@ https://www.nature.com/articles/d41586-023-00056-7
 
 ### Technical
 https://towardsdatascience.com/demystifying-de-identification-f89c977a1be5
+
+### Detecting narrative text
+https://github.com/sztal/narcy

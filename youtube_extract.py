@@ -79,11 +79,11 @@ class YoutubeExtractor:
         response = request.execute()
         print(response)
 
-    def get_all_comment_threads(self, channel_id):
+    def get_all_comment_threads(self, object_id, object_type='channel'):
         iter = 0
         total_count = 0
         while self.comments_next_page_token or iter == 0:
-            response = self.get_comment_threads(channel_id)
+            response = self.get_comment_threads(object_id, object_type=object_type)
             page_count = response['pageInfo']['totalResults']
             total_count += page_count
             for item in response['items']:
@@ -96,15 +96,24 @@ class YoutubeExtractor:
             iter += 1
         return response
 
-    def get_comment_threads(self, channel_id):
+    def get_comment_threads(self, object_id, object_type='channel'):
         """quote = 10 units per request"""
-        request = self.youtube_client.commentThreads().list(
-            part="id,snippet,replies",
-            allThreadsRelatedToChannelId=channel_id,
-            maxResults=100,
-            textFormat="plainText",
-            pageToken=self.comments_next_page_token
-        )
+        if object_type == 'channel':
+            request = self.youtube_client.commentThreads().list(
+                part="id,snippet,replies",
+                allThreadsRelatedToChannelId=object_id,
+                maxResults=100,
+                textFormat="plainText",
+                pageToken=self.comments_next_page_token
+            )
+        elif object_type == 'video':
+            request = self.youtube_client.commentThreads().list(
+                part="id,snippet,replies",
+                maxResults=100,
+                textFormat="plainText",
+                videoId=object_id,
+                pageToken=self.comments_next_page_token
+            )
         response = request.execute()
         self.comments_next_page_token = response.get('nextPageToken', None)
         return response
@@ -184,7 +193,7 @@ class YoutubeExtractor:
     def extract_comment(self, comment_dict, is_reply=False):
         '''Transform comment dictionary into a tuple'''
         comment_video_id = self.fernet.encrypt(bytes(comment_dict['snippet']['videoId'], 'utf-8')).decode('utf-8')
-        comment_channel_id = self.fernet.encrypt(bytes(comment_dict['snippet']['channelId'], 'utf-8')).decode('utf-8')
+        comment_channel_id = self.fernet.encrypt(bytes(comment_dict['snippet']['channelId'], 'utf-8')).decode('utf-8') if comment_dict.get('snippet').get('channelId', None) else None
         comment_id = self.fernet.encrypt(bytes(comment_dict['id'], 'utf-8')).decode('utf-8')
         comment_text = comment_dict['snippet']['textDisplay']
         comment_likes = comment_dict['snippet']['likeCount']
@@ -199,8 +208,9 @@ class YoutubeExtractor:
                 
 def main():
     extractor = YoutubeExtractor([])
-    extractor.get_all_comment_threads("UCVgK5-w1dilMx7bPVB5yNug")
-    extractor.get_all_comment_threads("UCSXrEX7LkWOmfTaV6u1C7wQ")
+    #extractor.get_all_comment_threads("UCVgK5-w1dilMx7bPVB5yNug")
+    #extractor.get_all_comment_threads("UCSXrEX7LkWOmfTaV6u1C7wQ")
+    extractor.get_all_comment_threads("W6oQfSraqwg", object_type='video')
 
 
 if __name__ == "__main__":
