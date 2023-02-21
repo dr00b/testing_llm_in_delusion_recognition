@@ -1,0 +1,3 @@
+The following text contains evidence of a dementia patient which may have delusions. In a single phrase, indicate the dominant theme in the delusion, choosing your response to the following list: "theft", "infidelity", "house is not home", "fear of abandonment", "dead person is alive", "phantom boarder", "other".
+
+Text: {text}

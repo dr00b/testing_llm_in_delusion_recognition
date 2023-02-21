@@ -47,6 +47,8 @@ Results: Better, returns N/A on excerpt and theme without being prompted.
 
 3. Reduced complexity, removing extraction of dominant theme. With test set of ~5, this improved performance considerably.
 
+4. Fed back "possible delusion" candidates from test set, requesting theme classification. Leaned on other, poor performance.
+
 ### Prompt Constraints
 Short prompts appear to result in incorrectly structured responses.
 

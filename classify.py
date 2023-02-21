@@ -42,11 +42,6 @@ class Classifier:
         return response, text_id
 
     def extract_openapi_response(self, response, input_text_id=None):
-        s ="""
-        [Possible Delusion]: true
-        [Excerpt]: "I told them well yes, I admitted stealing it, to her, not to you, because someone on youtube told me to admit it, even though I didn't actually steal it."
-        [Dominant Theme]: Other
-        """
         response_text = response.choices[0].text
         possible_delusion = None
         excerpt = None
@@ -60,6 +55,8 @@ class Classifier:
             elif self.prompt_version == 3:
                 possible_delusion = True if response_text.split("Possible Delusion: ")[1].split("\n")[0] == "true" else False
                 excerpt = response_text.split("Excerpt: ")[1].split("\n")[0]
+            elif self.prompt_version == 4:
+                dominant_theme = response.choices[0].text
         except IndexError:
             print(response_text)
             parsing_error = True
