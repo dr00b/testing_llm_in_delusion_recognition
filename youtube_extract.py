@@ -15,6 +15,7 @@ import googleapiclient.discovery
 import sqlite3
 import base64
 import os
+import spacy
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -48,6 +49,10 @@ class YoutubeExtractor:
         key = base64.urlsafe_b64encode(kdf.derive(bytes(self.encryption_key, 'utf-8')))
         self.fernet = Fernet(key)
 
+        # init spacy
+        self.nlp = spacy.load("en_core_web_sm")
+
+
     def create_comments_table(self):
         conn = sqlite3.connect(self.database_path)
         c = conn.cursor()
@@ -57,8 +62,6 @@ class YoutubeExtractor:
             comment_id text,
             comment_text text,
             comment_likes integer,
-            comment_author text,
-            comment_author_id text,
             comment_author_channel_id text,
             comment_published_at text,
             comment_updated_at text,
@@ -70,11 +73,10 @@ class YoutubeExtractor:
         conn.commit()
         conn.close()
 
-    def get_video_stats(self):
-        dementia_vid = 'q3NgWY-BAJw'
+    def get_video_stats(self, video_id):
         request = self.youtube_client.videos().list(
             part="contentDetails,topicDetails,snippet,statistics",
-            id=dementia_vid
+            id=video_id
         )
         response = request.execute()
         print(response)
@@ -128,15 +130,13 @@ class YoutubeExtractor:
                 comment_id,
                 comment_text,
                 comment_likes,
-                comment_author,
-                comment_author_id,
                 comment_author_channel_id,
                 comment_published_at,
                 comment_updated_at,
                 is_reply,
                 reply_by_channel_owner
             )
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""", comment_tuple)
+            VALUES (?,?,?,?,?,?,?,?,?,?)""", comment_tuple)
         conn.commit()
         conn.close()
 
@@ -145,66 +145,44 @@ class YoutubeExtractor:
         # https://issuetracker.google.com/issues/241669016?pli=1
         pass
 
-    def find_experts(self, topic_list, language='en'):
-        """this didn't work very well, but it's a start. Faster to just search browser for convenience sample"""
-        def iterate_responses(response):
-            for item in response['items']:
-                channelID = item['id']['channelId']
-                title = item['snippet']['channelTitle']
-                description = item['snippet']['description']
-                if 'I' in description.split(' '):
-                    print(channelID)
-                    print(title)
-                    print(description)
-        
-        q = '|'.join(topic_list)
-
-        request = self.youtube_client.search().list(
-            part="snippet",
-            q=q,
-            type='channel',
-            #order="viewCount",
-            maxResults=50,
-            relevanceLanguage=language
-        )
-        response = request.execute()
-        next_page_token = response.get('nextPageToken', None)
-        iterate_responses(response)
-
-        count=0
-        while next_page_token:
-            count+=1
-            if count > 15:
-                break
-            request = self.youtube_client.search().list(
-                part="snippet",
-                q=q,
-                type='channel',
-                order="viewCount",
-                maxResults=50,
-                relevanceLanguage=language,
-                pageToken=next_page_token
-            )
-            response = request.execute()
-            next_page_token = response.get('nextPageToken', None)
-            iterate_responses(response)
-
-
     def extract_comment(self, comment_dict, is_reply=False):
         '''Transform comment dictionary into a tuple'''
-        comment_video_id = self.fernet.encrypt(bytes(comment_dict['snippet']['videoId'], 'utf-8')).decode('utf-8')
-        comment_channel_id = self.fernet.encrypt(bytes(comment_dict['snippet']['channelId'], 'utf-8')).decode('utf-8') if comment_dict.get('snippet').get('channelId', None) else None
+        video_id = self.fernet.encrypt(bytes(comment_dict['snippet']['videoId'], 'utf-8')).decode('utf-8')
+        channel_id = self.fernet.encrypt(bytes(comment_dict['snippet']['channelId'], 'utf-8')).decode('utf-8') if comment_dict.get('snippet').get('channelId', None) else None
         comment_id = self.fernet.encrypt(bytes(comment_dict['id'], 'utf-8')).decode('utf-8')
-        comment_text = comment_dict['snippet']['textDisplay']
+        comment_text = self.redact_names(comment_dict['snippet']['textDisplay'])
         comment_likes = comment_dict['snippet']['likeCount']
-        comment_author = self.fernet.encrypt(bytes(comment_dict['snippet']['authorDisplayName'], 'utf-8')).decode('utf-8')
-        comment_author_id = self.fernet.encrypt(bytes(comment_dict['snippet']['authorChannelId']['value'], 'utf-8')).decode('utf-8')
+        #comment_author = self.fernet.encrypt(bytes(comment_dict['snippet']['authorDisplayName'], 'utf-8')).decode('utf-8')
         comment_author_channel_id = self.fernet.encrypt(bytes(comment_dict['snippet']['authorChannelId']['value'], 'utf-8')).decode('utf-8')
         comment_published_at = comment_dict['snippet']['publishedAt']
         comment_updated_at = comment_dict['snippet']['updatedAt']
-        reply_by_channel_owner = True if is_reply and comment_channel_id == comment_author_channel_id else False
-        return (comment_video_id, comment_channel_id, comment_id, comment_text, comment_likes, comment_author, comment_author_id, comment_author_channel_id, comment_published_at, comment_updated_at, is_reply, reply_by_channel_owner)
-        
+        reply_by_channel_owner = True if is_reply and channel_id == comment_author_channel_id else False
+        return (video_id, channel_id, comment_id, comment_text, comment_likes, comment_author_channel_id, comment_published_at, comment_updated_at, is_reply, reply_by_channel_owner)
+    
+    def redact_names(self, comment_text):
+        """Remove names from comment text"""
+        doc = self.nlp(comment_text)
+        for ent in doc.ents:
+            if ent.label_ == 'PERSON':
+                replace_text = ent.text
+                if len(ent.text) > 2:
+                    # preserve possessives
+                    if ent.text[-2:] == "'s":
+                        replace_text = ent.text[:-2]
+                    elif ent.text[-1:] == "'": 
+                        replace_text = ent.text[:-1]
+                comment_text = comment_text.replace(replace_text, 'PERSON')
+        return comment_text
+
+    def find_experts(self, topic_list, language='en'):
+        """This was too cumbersome, went with a convenience sample...
+
+        Search by topic list
+        Verify keywords in channel description
+        Check that channel thumbnail is a person's face
+        """
+        pass
+      
                 
 def main():
     extractor = YoutubeExtractor([])

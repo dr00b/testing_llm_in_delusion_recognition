@@ -1,6 +1,29 @@
 # nlp_final
 Test - Beep boop
 
+# Installation
+Initialized a python environment, python=3.10
+
+### Misc
+```
+conda install python-dotenv
+conda install jupyter
+```
+
+### Google and OpenAI API Wrappers
+```
+conda install -c conda-forge google-api-python-client
+conda install -c conda-forge openai
+```
+
+### Spacy Experimental Coreference Library
+```
+pip install spacy_experimental
+pip install chardet
+pip install thinc[torch]
+pip install https://github.com/explosion/spacy-experimental/releases/download/v0.6.1/en_coreference_web_trf-3.4.0a2-py3-none-any.whl
+```
+
 # Issues
 ### Youtube
 - Search function does not actually order by views despite parameter. Receiving very low view count videos alongside "stars".
@@ -19,18 +42,19 @@ Test - Beep boop
 - [500 Response Error 2/16/2023](https://community.openai.com/t/continuous-gpt3-api-500-error-the-server-had-an-error-while-processing-your-request-sorry-about-that/42239/14)
 - [No text in response](https://community.openai.com/t/empty-text-in-the-response-from-the-api-after-few-calls/2067/11). I suspect this is due to predicting a stop sequence in the first character. In playground received: "The model predicted a completion that begins with a stop sequence, resulting in no output. Consider adjusting your prompt or stop sequences."
 
-
 # Bias in Data
-- Topic is affected by video content. People may have searched for the content, internalized vocabulary. Therefore not simulating someone who has yet to find helpful content.
+- Topic is affected by video content. People may have searched for the content, found a useful video, and begun internalizing vocabulary. Therefore not simulating an individual who has yet to find helpful content.
 - Not clear why data is not present in API which is present via browser. May be result of anti-spam filters. In other cases, channel owners moderate comment content, stays in under review, but the comment count has already incremented in database. Complexity of managing a system with billions of videos, can't eventual consistency of aggregate stats. A [quora post to explain.](https://www.quora.com/Why-do-the-comments-number-on-Youtube-sometimes-not-match-the-actual-ones-shown)
 
 # Methods
-- Use classic NLP techniques to identify patient testimonials in text. (length, narrative text cues, must be multiple langugages). *Attempting to identify comments which may be similar to a knowledgeable informant answering questions re: patient behavior in memory clinic.*
-- Use classic NLP techniques to remove useless excerpts (thank you to the poster) to economize precious AI credits. Golem gif?
+- Convenience sample. Searched Youtube with query "dementia OR alzheimer", sorted by view count. Clicked through to channel. If it published primarily educational content for dementia caregivers, documented the channel id. Otherwise, took individual videos only. If video content was 1. focused on reducing risk of dementia for young people or 2. was obviously created to sell nutrional supplemented, I did not include it in the list.
+- Used out of the box Spacy NER to redact names.
+- Use coreference techniques to identify patient testimonials in text. (length, narrative text cues, must be multiple langugages). *Attempting to identify comments which may be similar to a knowledgeable informant answering questions re: patient behavior in memory clinic.*
+- Use classic NLP techniques to remove useless excerpts (thank you to the poster) to economize precious AI credits (probably not worth effort)
+- Manually code comments for possible dementia reference, highlighting excerpts as evidence. Oversample from delusion related videos to ensure there are examples of delusion related posts without delusion keywords.
 - Send as many results as possible to da-vinci model (justifiable given qualitative coding case)
 - Choice of presence / frequency penalty and temperature to enhance consistency.
-- Manually code responses, highlighting evidence (can I get annotators for this?)
-- Compute concordance, ability to cite evidence from text
+- Compute confusion matrix, similarity score in cited excerpts when available
 
 # Prompt Iteration
 I refuse to call this "engineering" :)
@@ -59,6 +83,7 @@ Short prompts appear to result in incorrectly structured responses.
 - Verify excerpts are in original
 - Discuss how to identify stories w/ Patryk
 - Prompt 4 - For positive cases, feed the same text and excerpt. Ask for classification, assserting possible delusion
+- Read [coreference blog post](https://explosion.ai/blog/coref)
 
 ### Technical
 - create requirements.txt
@@ -73,6 +98,11 @@ https://medium.com/@AlyssaSha/fine-tuning-gpt-3-using-python-for-keywords-classi
 https://platform.openai.com/docs/api-reference/parameter-details
 
 ### Coreference resolution
+Experimental Spacy Coreference (released Oct 2022):
+- [Blog Post](https://explosion.ai/blog/coref)
+- [API Docs](https://spacy.io/api/coref)
+- [Github How To Issue](https://github.com/explosion/spaCy/discussions/11585)
+
 https://medium.com/huggingface/state-of-the-art-neural-coreference-resolution-for-chatbots-3302365dcf30
 https://neurosys.com/blog/intro-to-coreference-resolution-in-nlp
 
