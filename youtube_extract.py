@@ -16,11 +16,26 @@ import sqlite3
 import base64
 import os
 import spacy
+import logging
+import sys
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 load_dotenv()
+
+def setup_custom_logger(name):
+    formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                                  datefmt='%Y-%m-%d %H:%M:%S')
+    handler = logging.FileHandler('logs/youtube_extract.log', mode='w')
+    handler.setFormatter(formatter)
+    screen_handler = logging.StreamHandler(stream=sys.stdout)
+    screen_handler.setFormatter(formatter)
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+    logger.addHandler(screen_handler)
+    return logger
 
 class YoutubeExtractor:
     def __init__(self, topic_list, languages=['en']):
@@ -38,6 +53,7 @@ class YoutubeExtractor:
         )
         self.database_path = os.path.join("data", os.getenv('SQLITE_DB_NAME'))
         self.create_comments_table()
+        self.logger = setup_custom_logger('youtube_extract')
 
         # init encryption
         kdf = PBKDF2HMAC(
@@ -84,19 +100,23 @@ class YoutubeExtractor:
     def get_all_comment_threads(self, object_id, object_type='channel'):
         iter = 0
         total_count = 0
-        while self.comments_next_page_token or iter == 0:
-            response = self.get_comment_threads(object_id, object_type=object_type)
-            page_count = response['pageInfo']['totalResults']
-            total_count += page_count
-            for item in response['items']:
-                self.save_comment(self.extract_comment(item['snippet']['topLevelComment']))
-                if item.get('replies', None):
-                    for reply in item['replies']['comments']:
-                        reply = self.extract_comment(reply, is_reply=True)
-                        self.save_comment(reply)
-            print(f'Iteration: {iter}, Page count: {page_count}, Total count: {total_count}')
-            iter += 1
-        return response
+        self.logger.info(f"object_id: {object_id}, object_type: {object_type}")
+        try:
+            while self.comments_next_page_token or iter == 0:
+                response = self.get_comment_threads(object_id, object_type=object_type)
+                page_count = response['pageInfo']['totalResults']
+                total_count += page_count
+                for item in response['items']:
+                    self.save_comment(self.extract_comment(item['snippet']['topLevelComment']))
+                    if item.get('replies', None):
+                        for reply in item['replies']['comments']:
+                            reply = self.extract_comment(reply, is_reply=True)
+                            self.save_comment(reply)
+                self.logger.info(f'Iteration: {iter}, Page count: {page_count}, Total count: {total_count}')
+                iter += 1
+        except Exception as e:
+            self.logger.error(e)
+            return None
 
     def get_comment_threads(self, object_id, object_type='channel'):
         """quote = 10 units per request"""
@@ -153,7 +173,7 @@ class YoutubeExtractor:
         comment_text = self.redact_names(comment_dict['snippet']['textDisplay'])
         comment_likes = comment_dict['snippet']['likeCount']
         #comment_author = self.fernet.encrypt(bytes(comment_dict['snippet']['authorDisplayName'], 'utf-8')).decode('utf-8')
-        comment_author_channel_id = self.fernet.encrypt(bytes(comment_dict['snippet']['authorChannelId']['value'], 'utf-8')).decode('utf-8')
+        comment_author_channel_id = self.fernet.encrypt(bytes(comment_dict['snippet']['authorChannelId']['value'], 'utf-8')).decode('utf-8') if comment_dict['snippet'].get('authorChannelId', None) else None
         comment_published_at = comment_dict['snippet']['publishedAt']
         comment_updated_at = comment_dict['snippet']['updatedAt']
         reply_by_channel_owner = True if is_reply and channel_id == comment_author_channel_id else False
@@ -187,10 +207,10 @@ class YoutubeExtractor:
 def main():
     extractor = YoutubeExtractor([])
     with open("data/channels_en.txt", "r") as f:
-        channels = f.read().splitlines()
-        for channel in channels:
-            channel_id = channel.split("|")[1]
-            extractor.get_all_comment_threads(channel_id, object_type='channel')
+         channels = f.read().splitlines()
+         for channel in channels:
+             channel_id = channel.split("|")[1]
+             extractor.get_all_comment_threads(channel_id, object_type='channel')
     
     with open("data/vids_to_search_dedup_en.txt", "r") as f:
         videos = f.read().splitlines()
