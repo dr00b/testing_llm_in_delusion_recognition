@@ -81,6 +81,7 @@ Short prompts appear to result in incorrectly structured responses.
 - Tighten definition, or clarify that delusion must include "provided evidence to contrary". If the person is convinced of the contrary, they no longer have a delusion. Should discuss this w/ peers
 - Deidentification. 1. Delete comments w/ names in them. Pronouns only. 2. Encrypt id's of commenters. Channels no... Reasonable expectation that 
 - Verify excerpts are in original
+- Remove emails / phone numbers
 - Discuss how to identify stories w/ Patryk
 - Prompt 4 - For positive cases, feed the same text and excerpt. Ask for classification, assserting possible delusion
 - Read [coreference blog post](https://explosion.ai/blog/coref)

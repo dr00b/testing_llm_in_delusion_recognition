@@ -217,15 +217,5 @@ def main():
         for video_id in videos:
             extractor.get_all_comment_threads(video_id, object_type='video')
 
-    conn = sqlite3.connect(extractor.database_path)
-    conn.execute("""
-        -- Dedup due to inclusion of channel and video
-        DELETE FROM comments
-        WHERE rowid NOT IN (
-        SELECT MIN(rowid) 
-        FROM comments
-        GROUP BY comment_id
-    """)
-
 if __name__ == "__main__":
     main()
