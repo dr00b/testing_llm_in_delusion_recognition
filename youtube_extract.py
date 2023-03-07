@@ -186,10 +186,26 @@ class YoutubeExtractor:
                 
 def main():
     extractor = YoutubeExtractor([])
-    #extractor.get_all_comment_threads("UCVgK5-w1dilMx7bPVB5yNug")
-    #extractor.get_all_comment_threads("UCSXrEX7LkWOmfTaV6u1C7wQ")
-    extractor.get_all_comment_threads("W6oQfSraqwg", object_type='video')
+    with open("data/channels_en.txt", "r") as f:
+        channels = f.read().splitlines()
+        for channel in channels:
+            channel_id = channel.split("|")[1]
+            extractor.get_all_comment_threads(channel_id, object_type='channel')
+    
+    with open("data/vids_to_search_dedup_en.txt", "r") as f:
+        videos = f.read().splitlines()
+        for video_id in videos:
+            extractor.get_all_comment_threads(video_id, object_type='video')
 
+    conn = sqlite3.connect(extractor.database_path)
+    conn.execute("""
+        -- Dedup due to inclusion of channel and video
+        DELETE FROM comments
+        WHERE rowid NOT IN (
+        SELECT MIN(rowid) 
+        FROM comments
+        GROUP BY comment_id
+    """)
 
 if __name__ == "__main__":
     main()

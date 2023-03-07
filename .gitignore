@@ -5,7 +5,7 @@
 
 data/*
 !data/.gitkeep
-
+scripts/*
 
 
 # Byte-compiled / optimized / DLL files

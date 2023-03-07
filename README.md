@@ -47,11 +47,11 @@ pip install https://github.com/explosion/spacy-experimental/releases/download/v0
 - Not clear why data is not present in API which is present via browser. May be result of anti-spam filters. In other cases, channel owners moderate comment content, stays in under review, but the comment count has already incremented in database. Complexity of managing a system with billions of videos, can't eventual consistency of aggregate stats. A [quora post to explain.](https://www.quora.com/Why-do-the-comments-number-on-Youtube-sometimes-not-match-the-actual-ones-shown)
 
 # Methods
-- Convenience sample. Searched Youtube with query "dementia OR alzheimer", sorted by view count. Clicked through to channel. If it published primarily educational content for dementia caregivers, documented the channel id. Otherwise, took individual videos only. If video content was 1. focused on reducing risk of dementia for young people or 2. was obviously created to sell nutrional supplemented, I did not include it in the list.
+- Convenience sample. Searched Youtube with query "dementia OR alzheimer's", sorted by view count. Clicked through to channel. If it published primarily educational content for dementia caregivers, documented the channel id. Otherwise, took individual videos only. If video content was 1. focused on reducing risk of dementia for young people or 2. was obviously created to sell nutrional supplements, I did not include it in the list. Stopped at 450 thousand views. Included highest view count shorts as well. 72 videos total. 3/6/2023
 - Used out of the box Spacy NER to redact names.
 - Use coreference techniques to identify patient testimonials in text. (length, narrative text cues, must be multiple langugages). *Attempting to identify comments which may be similar to a knowledgeable informant answering questions re: patient behavior in memory clinic.*
 - Use classic NLP techniques to remove useless excerpts (thank you to the poster) to economize precious AI credits (probably not worth effort)
-- Manually code comments for possible dementia reference, highlighting excerpts as evidence. Oversample from delusion related videos to ensure there are examples of delusion related posts without delusion keywords.
+- Manually code comments for possible dementia reference, highlighting excerpts as evidence. Oversample from delusion related videos (delusion in desc) to ensure there are examples of delusion related posts without delusion keywords.
 - Send as many results as possible to da-vinci model (justifiable given qualitative coding case)
 - Choice of presence / frequency penalty and temperature to enhance consistency.
 - Compute confusion matrix, similarity score in cited excerpts when available
