@@ -102,6 +102,7 @@ Experimental Spacy Coreference (released Oct 2022):
 - [Blog Post](https://explosion.ai/blog/coref)
 - [API Docs](https://spacy.io/api/coref)
 - [Github How To Issue](https://github.com/explosion/spaCy/discussions/11585)
+- [Video Summary](https://www.youtube.com/watch?v=fio3BejnRsM)
 
 https://medium.com/huggingface/state-of-the-art-neural-coreference-resolution-for-chatbots-3302365dcf30
 https://neurosys.com/blog/intro-to-coreference-resolution-in-nlp
