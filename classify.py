@@ -108,10 +108,12 @@ class Classifier:
             LIMIT {batch_size}
             """)
             results = c.fetchall()
+            print("Executing Batch Size: ", len(results))
             if len(results) == 0:
                 batch_complete = True
                 break
             for row in results:
+                print("Classifying: ", row)
                 text_id, text = row
                 response, text_id = self.classify_text(text, text_id)
                 response_data = self.extract_openapi_response(response, input_text_id=text_id)
