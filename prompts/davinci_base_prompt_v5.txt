@@ -1,0 +1,48 @@
+You are qualitative researcher reviewing Youtube comments from channels related to dementia. You are following a coding rubric which outlines specific cases to classify as possible delusion.
+
+### Qualitative Coding Rubric
+1. Explicit Characterization as Delusion
+Textual Evidence: Commenter explicitly states that the individual with dementia has delusions or a delusional disorder.
+Example: "She has delusions that her abusive ex-husband has moved in next door and she also told us she's been getting mail from his new wife, but then told us the mail is thrown away when we ask to see it."
+
+2. Explicit Characterization of Individual with Dementia's Belief as Untrue
+Textual Evidence: Commentor indicates explicitly that a belief held by individual with dementia is false.
+Example: "She keeps saying her abusive ex-husband moved in next door. That's not true."
+
+3. Commenter Makes Contradictory Statement to Belief of Individual with Dementia
+Textual Evidence: Commenter indicates explicitly that a belief held by an individual with dementia is false by making a logically contradictory statement.
+Example: "She keeps saying her abusive ex husband moved in next door. He lives in another state."
+
+4. Individual with dementia expresses a belief which is logically impossible
+Textual Evidence: Commenter describes a statement made or belief held by the individual with dementia which is logically impossible.
+Example: "She thinks that it's 1947."
+Example: "I died yesterday."
+
+5. Individual with dementia has belief which a common type of delusion among individuals with dementia.
+Common themes in delusions:
+Theft
+Infidelity
+House is not home
+Phantom boarder
+Persecution
+Misidentification of people or things
+Dead person is alive
+TV Characters are real
+
+Example: "One day she swore I had a lady renting a room in my house and she was stealing her stuff.  I told her wait one minute grandma I'll be right back.  She owe me some rent money. Let me go collect it. Came back in she forgot all about it."
+Example: "The idea of telling my mom that she was right about strangers trying to steal her remote and the cops had arrested him just does not sit with me."
+Example: "Once, I told my mother the truth, because the alternative was that she was in distress thinking her husband had left her for someone else."
+
+6. Implicit Contradiction of a Belief of Individual with Dementia
+The commenter implies that the patient's belief is a delusion. In this case, the individual with dementia's belief may be plausible. Inference must be made based on context and the specific words used by the commenter.
+Words like "accused" indicate defensiveness and a belief by the knowledgeable informant that the individual with dementia's belief is untrue.
+Words like "thinks", "believes", "swore", "convinced" imply that the individual with dementia's belief is not based in fact.
+
+### Task Instructions
+Does the following text show evidence of a dementia patient which may have delusions? If yes, extract an excerpt from the text to justify your response.
+
+Structure your response as follows:
+Possible Delusion: true / false
+Excerpt: Excerpt
+
+Text: {text}

@@ -57,6 +57,9 @@ class Classifier:
                 excerpt = response_text.split("Excerpt: ")[1].split("\n")[0]
             elif self.prompt_version == 4:
                 dominant_theme = response.choices[0].text
+            elif self.prompt_version == 5:
+                possible_delusion = True if response_text.split("Possible Delusion: ")[1].split("\n")[0].lower() == "true" else False
+                excerpt = response_text.split("Excerpt: ")[1].split("\n")[0]
         except IndexError:
             print(response_text)
             parsing_error = True
@@ -127,5 +130,4 @@ class Classifier:
 
 if __name__ == "__main__":
     classifier = Classifier()
-    #print(classifier.classify_text(os.getenv("TEST_TEXT")))
     classifier.classify_batch_and_save()

@@ -1,3 +1,5 @@
+-- This didn't work... I broke correspondence of video_id column...
+-- My video id's do not map one to one to youtubes... Apparently misunderstood the encryption technique :(
 -- Identified delusion related video from popular channel
 ALTER TABLE comments ADD COLUMN is_delu_related_vid bool;
 

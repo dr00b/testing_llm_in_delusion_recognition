@@ -5,6 +5,7 @@
 
 data/*
 !data/.gitkeep
+!data/final_tokens_coref_heads_labelled.xlsx
 scripts/*
 
 
