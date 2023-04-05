@@ -92,10 +92,10 @@ Short prompts appear to result in incorrectly structured responses.
 
 # Resources
 ### Open AI on Classification
-https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset
 https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
-https://medium.com/@AlyssaSha/fine-tuning-gpt-3-using-python-for-keywords-classification-6c4970526c68
 https://platform.openai.com/docs/api-reference/parameter-details
+https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset
+https://medium.com/@AlyssaSha/fine-tuning-gpt-3-using-python-for-keywords-classification-6c4970526c68
 
 ### Coreference resolution
 Experimental Spacy Coreference (released Oct 2022):
