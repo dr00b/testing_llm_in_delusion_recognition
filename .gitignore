@@ -9,8 +9,10 @@ data/*
 !data/vids_to_search_en.txt
 !data/channels_en.txt
 
-scripts/*
 
+scripts/*
+logs/*
+!logs/.gitkeep
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
