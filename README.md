@@ -20,7 +20,7 @@ Note, this was an iterative research project. It's not possible to run start to 
 4. Run sql scripts 1-2 using your favorite SQLite interface. Note, anything annotation related will fail as you haven't created that table yet.
 5. Run through `notebooks/knowledgeable_informant_narratives.ipynb`
 6. Run sql script 3.
-7. Sql scripts 4-5. Get some data and start annotating! I kept it simple and did this in Excel, then loaded the data back into SQLite.
+7. Sql scripts 4-5. Get some data and start annotating! I kept it simple and did this in Excel, then loaded the data back into SQLite. The first batch of annotation informed the OpenAI prompting strategy and created a rubric for use in annotating a test set.
 8. Sql script 6 controls which data to send to the OpenAI model.
 9. Run `classify.py`
 10. Run through `notebooks/compute_results.ipynb`
