@@ -1,3 +1,4 @@
+-- does not exist an annotation for batch one
 SELECT input_text_id FROM classifications c
 WHERE NOT EXISTS (
 SELECT 1 FROM annotated a 

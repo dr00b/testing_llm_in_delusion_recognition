@@ -1,3 +1,4 @@
+-- This step should ahve occured first, prior to annotation
 ALTER TABLE comments ADD COLUMN is_deleted bool;
 
 UPDATE comments

@@ -1,8 +1,8 @@
--- Flag batch 1 for annotation
+-- Classify anything that has been annotated
 UPDATE comments
 SET to_classify = CASE WHEN ROWID IN (SELECT comment_rowid FROM annotated) THEN 1 ELSE NULL END
 
--- Flag batch 2 for davinci classification
+-- Flag 1500 random KI narratives as to_classify
 UPDATE comments
 SET to_classify = 1
 WHERE ROWID IN (
