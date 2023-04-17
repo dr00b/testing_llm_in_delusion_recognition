@@ -212,7 +212,7 @@ def main():
              channel_id = channel.split("|")[1]
              extractor.get_all_comment_threads(channel_id, object_type='channel')
     
-    with open("data/vids_to_search_dedup_en.txt", "r") as f:
+    with open("data/vids_to_search_en.txt", "r") as f:
         videos = f.read().splitlines()
         for video_id in videos:
             extractor.get_all_comment_threads(video_id, object_type='video')

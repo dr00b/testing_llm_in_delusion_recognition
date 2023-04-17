@@ -6,6 +6,9 @@
 data/*
 !data/.gitkeep
 !data/final_tokens_coref_heads_labelled.xlsx
+!data/vids_to_search_en.txt
+!data/channels_en.txt
+
 scripts/*
 
 
