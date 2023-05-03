@@ -48,10 +48,10 @@ See `final_report.pdf` for detailed overview of methods.
 
 # Resources
 ### Open AI on Classification
-https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
-https://platform.openai.com/docs/api-reference/parameter-details
-https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset
-https://medium.com/@AlyssaSha/fine-tuning-gpt-3-using-python-for-keywords-classification-6c4970526c68
+- https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
+- https://platform.openai.com/docs/api-reference/parameter-details
+- https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset
+- https://medium.com/@AlyssaSha/fine-tuning-gpt-3-using-python-for-keywords-classification-6c4970526c68
 
 ### Coreference resolution
 #### Experimental Spacy Coreference (released Oct 2022):
@@ -60,6 +60,6 @@ https://medium.com/@AlyssaSha/fine-tuning-gpt-3-using-python-for-keywords-classi
 - [Github How To Issue](https://github.com/explosion/spaCy/discussions/11585)
 - [Video Summary](https://www.youtube.com/watch?v=fio3BejnRsM)
 
-#### Other Options
-https://medium.com/huggingface/state-of-the-art-neural-coreference-resolution-for-chatbots-3302365dcf30
-https://neurosys.com/blog/intro-to-coreference-resolution-in-nlp
+#### Other Coreference Models
+- https://medium.com/huggingface/state-of-the-art-neural-coreference-resolution-for-chatbots-3302365dcf30
+- https://neurosys.com/blog/intro-to-coreference-resolution-in-nlp
