@@ -11,7 +11,7 @@ pip install thinc[torch]
 pip install https://github.com/explosion/spacy-experimental/releases/download/v0.6.1/en_coreference_web_trf-3.4.0a2-py3-none-any.whl
 ```
 
-# Steps
+# Steps To Run
 Note, this was an iterative research project. It's not possible to run start to finish simply via the cli. That said, an overview of steps is provided below:
 
 1. Copy `.env_template` to `.env` and populate it with your own API key / parameters
