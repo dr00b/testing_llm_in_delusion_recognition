@@ -1,5 +1,7 @@
 # Overview
-This repo was created as part of an NLP class during my masters program. The goal was to classify "possible delusion" in a corpus of YouTube comments in which knowledgable informants (family, friends, caregivers) described an individual with dementia. For the full picture, read the paper which is in this repo as `final_report.pdf`.
+This repo was created as part of an NLP class during my masters program. The goal was to classify "possible delusion" in a corpus of YouTube comments in which knowledgable informants (family, friends, caregivers) described an individual with dementia. 
+
+Read the paper which is in this repo as `BMIN521-Final-Report.pdf`.
 
 # Installations
 1. Initialize the conda environment using `environment.yml`
